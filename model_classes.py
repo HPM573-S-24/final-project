@@ -1,212 +1,94 @@
 import numpy as np
-
 import deampy.econ_eval as econ
 import deampy.statistics as stat
 from deampy.markov import MarkovJumpProcess
-from deampy.plots.sample_paths import PrevalencePathBatchUpdate
 from input_data import HealthStates
 
 
 class Patient:
     def __init__(self, id, parameters):
-        """ initiates a patient
-        :param id: ID of the patient
-        :param parameters: an instance of the parameters class
-        """
         self.id = id
         self.params = parameters
-        self.stateMonitor = PatientStateMonitor(parameters=parameters)
+        self.state_monitor = PatientStateMonitor(parameters=parameters)
 
     def simulate(self, n_time_steps):
-        """ simulate the patient over the specified simulation length """
-
-        # random number generator
         rng = np.random.RandomState(seed=self.id)
-        # Markov jump process
         markov_jump = MarkovJumpProcess(transition_prob_matrix=self.params.probMatrix)
 
-        k = 0  # simulation time step
-
-        # while the patient is alive and simulation length is not yet reached
-        while self.stateMonitor.get_if_alive() and k < n_time_steps:
-            # sample from the Markov jump process to get a new state
-            # (returns an integer from {0, 1, 2, ...})
+        k = 0
+        while self.state_monitor.get_if_alive() and k < n_time_steps:
             new_state_index = markov_jump.get_next_state(
-                current_state_index=self.stateMonitor.currentState.value,
+                current_state_index=self.state_monitor.currentState.value,
                 rng=rng)
 
-            # update health state
-            self.stateMonitor.update(time_step=k, new_state=HealthStates(new_state_index))
+            new_state = HealthStates(new_state_index)
+            self.state_monitor.update(time_step=k, new_state=new_state)
 
-            # increment time
+            if new_state != HealthStates.WELL and new_state != HealthStates.DEATH:
+                self.perform_screening(new_state)
+            if new_state == HealthStates.CIN_2plus:
+                break
             k += 1
 
+    def perform_screening(self, current_state):
+        if current_state == HealthStates.WELL:
+            # Choose screening test based on strategy (Pap, HPV, or Co-test)
+            # Perform the test
+            # Update patient's state and cost accordingly
+            pass
+        else:
+            # Perform colposcopy
+            # Update patient's state and cost accordingly
+            pass
 
 class PatientStateMonitor:
-    """ to update patient outcomes (years survived, cost, etc.) throughout the simulation """
     def __init__(self, parameters):
-
-        self.currentState = parameters.initialHealthState   # initial health state
-        # self.survivalTime = None      # survival time
-        # self.timeToAIDS = None        # time to develop AIDS
-        # patient's cost and utility monitor
-        self.costUtilityMonitor = PatientCostUtilityMonitor(parameters=parameters)
+        self.currentState = parameters.initialHealthState
+        self.costMonitor = PatientCostMonitor(parameters=parameters)
 
     def update(self, time_step, new_state):
-        """
-        update the current health state to the new health state
-        :param time_step: current time step
-        :param new_state: new state
-        """
-
-        # update survival time
-        # if new_state == HealthStates.HIV_DEATH:
-            # self.survivalTime = time_step + 0.5  # corrected for the half-cycle effect
-
-        # update time until AIDS
-        # if self.currentState != HealthStates.AIDS and new_state == HealthStates.AIDS:
-            # self.timeToAIDS = time_step + 0.5  # corrected for the half-cycle effect
-
-        # update cost and utility
-        self.costUtilityMonitor.update(k=time_step,
-                                       current_state=self.currentState,
-                                       next_state=new_state)
-
-        # update current health state
+        self.costMonitor.update(k=time_step, current_state=self.currentState, next_state=new_state)
         self.currentState = new_state
 
     def get_if_alive(self):
-        """ returns true if the patient is still alive """
-        if self.currentState != HealthStates.DEATH: # changed from HIV_DEATH (maybe add CC_DEATH health state)
-            return True
-        else:
-            return False
+        return self.currentState != HealthStates.DEATH
 
-
-class PatientCostUtilityMonitor:
-
+class PatientCostMonitor:
     def __init__(self, parameters):
-
-        # model parameters for this patient
         self.params = parameters
-
-        # total cost and utility
         self.totalDiscountedCost = 0
-        #self.totalDiscountedUtility = 0
 
     def update(self, k, current_state, next_state):
-        """ updates the discounted total cost and health utility
-        :param k: simulation time step
-        :param current_state: current health state
-        :param next_state: next health state
-        """
-
-        # update cost
-        cost = 0.5 * (self.params.annualStateCosts[current_state.value] +
-                      self.params.annualStateCosts[next_state.value])
-        # update utility
-        #utility = 0.5 * (self.params.annualStateUtilities[current_state.value] +
-                         #self.params.annualStateUtilities[next_state.value])
-
-        # add the cost of treatment
-        # if HIV death will occur, add the cost for half-year of treatment
-        if next_state == HealthStates.DEATH:  # change from HIV_DEATH
+        cost = 0.5 * (self.params.annualStateCosts[current_state.value] + self.params.annualStateCosts[next_state.value])
+        if next_state == HealthStates.DEATH:
             cost += 0.5 * self.params.annualTreatmentCost
         else:
-            cost += 1 * self.params.annualTreatmentCost
-            
-        if next_state == HealthStates.CIN_2plus:
-            cost += self.params.
+            cost += self.params.annualTreatmentCost
 
-        # update total discounted cost and utility (corrected for the half-cycle effect)
-        self.totalDiscountedCost += econ.pv_single_payment(payment=cost,
-                                                           discount_rate=self.params.discountRate / 2,
-                                                           discount_period=2 * k + 1)
-        #self.totalDiscountedUtility += econ.pv_single_payment(payment=utility,
-                                                              #discount_rate=self.params.discountRate / 2,
-                                                              #discount_period=2 * k + 1)
-
+        self.totalDiscountedCost += econ.pv_single_payment(payment=cost, discount_rate=self.params.discountRate / 2, discount_period=2 * k + 1)
 
 class Cohort:
     def __init__(self, id, pop_size, parameters):
-        """ create a cohort of patients
-        :param id: cohort ID
-        :param pop_size: population size of this cohort
-        :param parameters: parameters
-        """
         self.id = id
         self.popSize = pop_size
         self.params = parameters
-        self.cohortOutcomes = CohortOutcomes()  # outcomes of this simulated cohort
+        self.cohortOutcomes = CohortOutcomes()
 
     def simulate(self, n_time_steps):
-        """ simulate the cohort of patients over the specified number of time-steps
-        :param n_time_steps: number of time steps to simulate the cohort
-        """
-
-        # populate and simulate the cohort
         for i in range(self.popSize):
-            # create a new patient (use id * pop_size + n as patient id)
-            patient = Patient(id=self.id * self.popSize + i,
-                              parameters=self.params)
-            # simulate
+            patient = Patient(id=self.id * self.popSize + i, parameters=self.params)
             patient.simulate(n_time_steps)
-
-            # store outputs of this simulation
             self.cohortOutcomes.extract_outcome(simulated_patient=patient)
 
-        # calculate cohort outcomes
         self.cohortOutcomes.calculate_cohort_outcomes(initial_pop_size=self.popSize)
-
 
 class CohortOutcomes:
     def __init__(self):
-
-        # self.survivalTimes = []         # patients' survival times
-        # self.timesToAIDS = []           # patients' times to AIDS
-        self.costs = []                 # patients' discounted costs
-        #self.utilities = []              # patients' discounted utilities
-        #self.nLivingPatients = None  # survival curve (sample path of number of alive patients over time)
-
-        # self.statSurvivalTime = None    # summary statistics for survival time
-        # self.statTimeToAIDS = None      # summary statistics for time to AIDS
-        self.statCost = None            # summary statistics for discounted cost
-       # self.statUtility = None         # summary statistics for discounted utility
+        self.costs = []
+        self.statCost = None
 
     def extract_outcome(self, simulated_patient):
-        """ extracts outcome of a simulated patient
-        :param simulated_patient: a simulated patients"""
-
-        # record patient outcomes
-        # survival time
-        # if simulated_patient.stateMonitor.survivalTime is not None:
-            # self.survivalTimes.append(simulated_patient.stateMonitor.survivalTime)
-        # time until AIDS
-       #  if simulated_patient.stateMonitor.timeToAIDS is not None:
-            # self.timesToAIDS.append(simulated_patient.stateMonitor.timeToAIDS)
-        # discounted cost and discounted utility
-        self.costs.append(simulated_patient.stateMonitor.costUtilityMonitor.totalDiscountedCost)
-        #self.utilities.append(simulated_patient.stateMonitor.costUtilityMonitor.totalDiscountedUtility)
+        self.costs.append(simulated_patient.state_monitor.costMonitor.totalDiscountedCost)
 
     def calculate_cohort_outcomes(self, initial_pop_size):
-        """ calculates the cohort outcomes
-        :param initial_pop_size: initial population size
-        """
-
-        # summary statistics
-        # self.statSurvivalTime = stat.SummaryStat(
-            # name='Survival time', data=self.survivalTimes)
-        # self.statTimeToAIDS = stat.SummaryStat(
-            # name='Time until AIDS', data=self.timesToAIDS)
-        self.statCost = stat.SummaryStat(
-            name='Discounted cost', data=self.costs)
-        #self.statUtility = stat.SummaryStat(
-            #name='Discounted utility', data=self.utilities)
-
-        # survival curve
-        # self.nLivingPatients = PrevalencePathBatchUpdate(
-            # name='# of living patients',
-            # initial_size=initial_pop_size,
-            # times_of_changes=self.survivalTimes,
-            # increments=[-1] * len(self.survivalTimes)
-        # )
+        self.statCost = stat.SummaryStat(name='Discounted cost', data=self.costs)

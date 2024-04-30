@@ -2,10 +2,11 @@ import numpy as np
 from enum import Enum
 
 # simulation settings
-POP_SIZE = 10000         # cohort population size
-SIM_TIME_STEPS = 40    # length of simulation (years)
-ALPHA = 0.05        # significance level for calculating confidence intervals
-DISCOUNT = 0.03     # annual discount rate
+POP_SIZE = 10000  # cohort population size
+SIM_TIME_STEPS = 40  # length of simulation (years)
+ALPHA = 0.05  # significance level for calculating confidence intervals
+DISCOUNT = 0.03  # annual discount rate
+
 
 # HealthStates
 class HealthStates(Enum):
@@ -15,24 +16,25 @@ class HealthStates(Enum):
     CIN_2plus = 2
     DEATH = 3
 
+
 # transition matrix
 TRANS_MATRIX = [
-    [0.947,  0.04,    0.01,    0.003],
-    [0.6,     0.3,    0.097,   0.003], 
-    [0.2,     0.5,    0.297,   0.003],
-    [0,         0,         0,      1]
+    [0.947, 0.04, 0.01, 0.003],
+    [0.6, 0.3, 0.097, 0.003],
+    [0.2, 0.5, 0.297, 0.003],
+    [0, 0, 0, 1]
 ]
 
 # Annual state costs
 ANNUAL_STATE_COST = [
-    0,  
-    0,  
-    0,  
-    0] 
+    0,
+    0,
+    0,
+    0]
 
 # Cost of screening and colposcopy
 HPV_TEST_COST = 35.09  # every 5 years
-CO_TEST_COST = 34.16   # every 5 years
+CO_TEST_COST = 34.16  # every 5 years
 PAP_TEST_COST = 69.25  # every 3 years
 COLPOSCOPY_COST = 155.0
 
@@ -48,6 +50,7 @@ HPV_SPECIFICITY = 0.941
 
 CO_TEST_SENSITIVITY = 0.994
 CO_TEST_SPECIFICITY = 0.95
+
 
 # Transition matrices for each screening strategy
 def construct_transition_matrix(strategy):
@@ -77,4 +80,3 @@ def construct_transition_matrix(strategy):
             [0, 0, 0, 1]
         ])
         return co_test_transition_matrix
-    

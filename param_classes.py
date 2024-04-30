@@ -1,7 +1,5 @@
 from enum import Enum
-
 import numpy as np
-
 import input_data as data
 
 
@@ -23,7 +21,7 @@ class Parameters:
 
         # annual treatment cost
         if self.therapy == Therapies.PAP_TEST:
-            self.annualTreatmentCost = data.PAP_TREATMENT_COST
+            self.annualTreatmentCost = data.PAP_TEST_COST
         elif self.therapy == Therapies.HPV_TEST:
             self.annualTreatmentCost = data.HPV_TEST_COST
         elif self.therapy == Therapies.CO_TEST:
@@ -34,7 +32,6 @@ class Parameters:
 
         # annual state costs and utilities
         self.annualStateCosts = data.ANNUAL_STATE_COST
-        #self.annualStateUtilities = data.ANNUAL_STATE_UTILITY
 
         # discount rate
         self.discountRate = data.DISCOUNT
