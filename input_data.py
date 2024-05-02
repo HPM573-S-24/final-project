@@ -34,8 +34,8 @@ ANNUAL_STATE_COST = [
 
 # Cost of screening and colposcopy
 HPV_TEST_COST = 35.09  # every 5 years
-CO_TEST_COST = 34.16  # every 5 years
-PAP_TEST_COST = 69.25  # every 3 years
+CO_TEST_COST = 69.25   # every 5 years
+PAP_TEST_COST = 34.16  # every 3 years
 COLPOSCOPY_COST = 155.0
 
 # Natural death rate
