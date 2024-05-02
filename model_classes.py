@@ -2,7 +2,6 @@ import deampy.econ_eval as econ
 import deampy.statistics as stat
 import numpy as np
 from deampy.markov import MarkovJumpProcess
-from deampy.plots.sample_paths import PrevalencePathBatchUpdate
 
 from input_data import HealthStates
 
@@ -52,6 +51,7 @@ class PatientStateMonitor:
 
         if new_state == HealthStates.CIN_2plus:
             self.nPotentialCancer += 1
+            return False
 
         self.costUtilityMonitor.update(t=time_step,
                                        current_state=self.currentState,
