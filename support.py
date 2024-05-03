@@ -5,10 +5,10 @@ import deampy.statistics as stat
 import input_data as data
 
 
-def print_outcomes(sim_outcomes, therapy_name):
+def print_outcomes(sim_outcomes, test_name):
     """ prints the outcomes of a simulated cohort
     :param sim_outcomes: outcomes of a simulated cohort
-    :param therapy_name: the name of the selected therapy
+    :param test_name: the name of the selected test
     """
 
     potential_cancer_mean_CI_text = sim_outcomes.statNumCancer.get_formatted_mean_and_interval(
@@ -23,7 +23,7 @@ def print_outcomes(sim_outcomes, therapy_name):
         interval_type='c', alpha=data.ALPHA, deci=2)
 
     # print outcomes
-    print(therapy_name)
+    print(test_name)
     print("  Estimate of number of potential cervical cancer cases detected and {:.{prec}%} confidence interval:".format(1 - data.ALPHA, prec=0),
           potential_cancer_mean_CI_text)
     print("  Estimate of discounted cost and {:.{prec}%} confidence interval:".format(1 - data.ALPHA, prec=0),

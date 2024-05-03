@@ -29,13 +29,13 @@ cohort_co.simulate(n_time_steps=data.SIM_TIME_STEPS)
 
 # print the estimates for the mean survival time
 support.print_outcomes(sim_outcomes=cohort_pap.cohortOutcomes,
-                       therapy_name=param.Tests.PAP_TEST)
+                       test_name=param.Tests.PAP_TEST)
 support.print_outcomes(sim_outcomes=cohort_HPV.cohortOutcomes,
-                       therapy_name=param.Tests.HPV_TEST)
+                       test_name=param.Tests.HPV_TEST)
 support.print_outcomes(sim_outcomes=cohort_co.cohortOutcomes,
-                       therapy_name=param.Tests.CO_TEST)
+                       test_name=param.Tests.CO_TEST)
 
-# plot survival curves and histograms
+# plot histograms
 support.plot_histograms(sim_outcomes_pap=cohort_pap.cohortOutcomes,
                         sim_outcomes_HIV=cohort_HPV.cohortOutcomes,
                         sim_outcomes_co=cohort_co.cohortOutcomes)
