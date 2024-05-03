@@ -32,6 +32,12 @@ ANNUAL_STATE_COST = [
     0,
     0]
 
+ANNUAL_STATE_UTILITY = [
+    1,
+    0.95,
+    0.7,
+    0]
+
 # Cost of screening and colposcopy
 HPV_TEST_COST = 35.09  # every 5 years
 CO_TEST_COST = 69.25   # every 5 years

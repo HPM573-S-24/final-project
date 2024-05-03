@@ -20,17 +20,18 @@ class Parameters:
 
         # annual treatment cost
         if self.therapy == Therapies.PAP_TEST:
-            self.annualTreatmentCost = data.PAP_TEST_COST
+            self.annualTreatmentCost = data.PAP_TEST_COST/3
         elif self.therapy == Therapies.HPV_TEST:
-            self.annualTreatmentCost = data.HPV_TEST_COST
+            self.annualTreatmentCost = data.HPV_TEST_COST/5
         elif self.therapy == Therapies.CO_TEST:
-            self.annualTreatmentCost = data.CO_TEST_COST
+            self.annualTreatmentCost = data.CO_TEST_COST/5
 
         # transition probability matrix of the selected therapy
         self.probMatrix = data.TRANS_MATRIX
 
         # annual state costs and utilities
         self.annualStateCosts = data.ANNUAL_STATE_COST
+        self.annualStateUtilities =data.ANNUAL_STATE_UTILITY
 
         # discount rate
         self.discountRate = data.DISCOUNT

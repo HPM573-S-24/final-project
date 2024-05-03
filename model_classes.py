@@ -59,10 +59,7 @@ class PatientStateMonitor:
         self.currentState = new_state
 
     def get_if_alive(self):
-        if self.currentState in HealthStates.DEATH:
-            return False
-        else:
-            return True
+        return self.currentState != HealthStates.DEATH
 
 
 class PatientCostUtilityMonitor:
