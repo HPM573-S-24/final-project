@@ -106,7 +106,7 @@ class Cohort:
             self.cohortOutcomes.extract_outcome(simulated_patient=patient)
 
         # calculate cohort outcomes
-        self.cohortOutcomes.calculate_cohort_outcomes(initial_pop_size=self.popSize)
+        self.cohortOutcomes.calculate_cohort_outcomes()
 
 
 class CohortOutcomes:
@@ -126,14 +126,12 @@ class CohortOutcomes:
         self.costs.append(simulated_patient.stateMonitor.costUtilityMonitor.totalDiscountedCost)
         self.utilities.append(simulated_patient.stateMonitor.costUtilityMonitor.totalDiscountedUtility)
 
-    def calculate_cohort_outcomes(self, initial_pop_size):
+    def calculate_cohort_outcomes(self):
         """ calculates the cohort outcomes
-        :param initial_pop_size: initial population size
         """
 
         self.statCost = stat.SummaryStat(
             name='Discounted cost', data=self.costs)
         self.statUtility = stat.SummaryStat(
             name='Discounted utility', data=self.utilities)
-        self.statNumCancer = stat.SummaryStat(
-            name='Total Number of Potential Cancer Detected', data=self.nPotentialCancer)
+        self.statNumCancer = sum(self.nPotentialCancer)

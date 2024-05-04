@@ -1,3 +1,4 @@
 Strategy,Cost,Effect,Incremental Cost,Incremental Effect,ICER (with confidence interval)
 Pap test,"298 (296, 299)","21.81 (21.73, 21.88)",-,-,-
-Co test,"804 (800, 807)","21.86 (21.78, 21.93)","506 (500, 512)","0.05 (-0.14, 0.24)","10,297.94 (nan, nan)"
+HPV test,"481 (479, 483)","21.86 (21.79, 21.94)","184 (179, 188)","0.06 (-0.13, 0.24)","3,333.50 (nan, nan)"
+Co test,"804 (800, 807)","21.86 (21.78, 21.93)",-,-,Dominated

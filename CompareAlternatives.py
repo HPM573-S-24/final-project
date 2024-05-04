@@ -37,13 +37,15 @@ support.print_outcomes(sim_outcomes=cohort_co.cohortOutcomes,
 
 # plot histograms
 support.plot_histograms(sim_outcomes_pap=cohort_pap.cohortOutcomes,
-                        sim_outcomes_HIV=cohort_HPV.cohortOutcomes,
+                        sim_outcomes_HPV=cohort_HPV.cohortOutcomes,
                         sim_outcomes_co=cohort_co.cohortOutcomes)
 
 # print comparative outcomes
 support.print_comparative_outcomes(sim_outcomes_pap=cohort_pap.cohortOutcomes,
+                                   sim_outcomes_HPV=cohort_HPV.cohortOutcomes,
                                    sim_outcomes_co=cohort_co.cohortOutcomes)
 
 # report the CEA results
 support.report_CEA_CBA(sim_outcomes_pap=cohort_pap.cohortOutcomes,
+                       sim_outcomes_HPV=cohort_HPV.cohortOutcomes,
                        sim_outcomes_co=cohort_co.cohortOutcomes)
