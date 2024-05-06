@@ -49,7 +49,7 @@ class PatientStateMonitor:
         if not self.get_if_alive():
             return
 
-        if new_state == HealthStates.CIN_2plus:
+        if new_state == HealthStates.CANCER:
             self.nPotentialCancer += 1
             return False
 
@@ -59,7 +59,10 @@ class PatientStateMonitor:
         self.currentState = new_state
 
     def get_if_alive(self):
-        return self.currentState != HealthStates.DEATH
+        if self.currentState == HealthStates.DEATH:
+            return False
+        else:
+            return True
 
 
 class PatientCostUtilityMonitor:
