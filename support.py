@@ -122,7 +122,7 @@ def report_CEA_CBA(sim_outcomes_pap, sim_outcomes_co, sim_outcomes_HPV):
 
     # Perform cost-effectiveness analysis (CEA)
     CEA = econ.CEA(
-        strategies=[pap_test_strategy, co_test_strategy, hpv_test_strategy],
+        strategies=[co_test_strategy, pap_test_strategy, hpv_test_strategy],
         if_paired=False
     )
 
@@ -147,7 +147,7 @@ def report_CEA_CBA(sim_outcomes_pap, sim_outcomes_co, sim_outcomes_HPV):
 
     # Perform cost-benefit analysis (CBA)
     CBA = econ.CBA(
-        strategies=[pap_test_strategy, co_test_strategy, hpv_test_strategy],
+        strategies=[co_test_strategy, pap_test_strategy, hpv_test_strategy],
         wtp_range=[0, 100000],  # Range of willingness-to-pay per Potential Cervical Cancer Case Detected
         if_paired=False
     )
