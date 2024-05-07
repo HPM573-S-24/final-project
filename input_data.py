@@ -58,3 +58,4 @@ PAP_TEST_COST = 34.16  # every 3 years
 COLPOSCOPY_COST = 155.0
 
 
+

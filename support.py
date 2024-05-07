@@ -94,3 +94,4 @@ def report_CEA_CBA(sim_outcomes_pap, sim_outcomes_co, sim_outcomes_HPV):
         figure_size=(6, 5),
         file_name='figs/nmb.png'
     )
+
