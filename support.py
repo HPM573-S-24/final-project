@@ -1,7 +1,4 @@
 import deampy.econ_eval as econ
-import deampy.plots.histogram as hist
-import deampy.statistics as stat
-
 import input_data as data
 
 
@@ -30,71 +27,6 @@ def print_outcomes(sim_outcomes, test_name):
     print("  Estimate of discounted utility and {:.{prec}%} confidence interval:".format(1 - data.ALPHA, prec=0),
           utility_mean_CI_text)
     print("")
-
-
-def plot_histograms(sim_outcomes_pap, sim_outcomes_HPV, sim_outcomes_co):
-    potential_cancer_numbers = [
-        sim_outcomes_pap.nPotentialCancer,
-        sim_outcomes_HPV.nPotentialCancer,
-        sim_outcomes_co.nPotentialCancer
-    ]
-
-    # histogram of number of potential cancer cases detected
-    hist.plot_histograms(
-        data_sets=potential_cancer_numbers,
-        title='Histogram of Number of potential cancer cases detected',
-        x_label='Number of potential cancer cases detected',
-        y_label='Count',
-        bin_width=1,
-        legends=['Pap Test', 'HPV test', 'Co Test'],
-        color_codes=['blue', 'green', 'red'],
-        transparency=0.5,
-        file_name='figs/number_of_potential_cancer.png'
-    )
-
-
-def print_comparative_outcomes(sim_outcomes_pap, sim_outcomes_co, sim_outcomes_HPV):
-    # Calculate the difference in the number of potential cancer cases detected between Pap test and Co test
-    increase_potential_cancer_number_pap_vs_co = stat.DifferenceStatIndp(
-        name='Change in mean number of potential cancer cases detected (Pap vs. Co)',
-        x=sim_outcomes_pap.nPotentialCancer,
-        y_ref=sim_outcomes_co.nPotentialCancer
-    )
-
-    # Estimate and CI
-    estimate_CI_pap_vs_co = increase_potential_cancer_number_pap_vs_co.get_formatted_mean_and_interval(
-        interval_type='c', alpha=data.ALPHA, deci=2
-    )
-    print("Change in mean number of potential cancer cases detected (Pap vs. Co) and {:.{prec}%} confidence interval:"
-          .format(1 - data.ALPHA, prec=0), estimate_CI_pap_vs_co)
-
-    # Calculate the difference in the number of potential cancer cases detected between HPV test and Co test
-    increase_potential_cancer_number_hpv_vs_co = stat.DifferenceStatIndp(
-        name='Change in mean number of potential cancer cases detected (HPV vs. Co)',
-        x=sim_outcomes_HPV.nPotentialCancer,
-        y_ref=sim_outcomes_co.nPotentialCancer
-    )
-
-    # Estimate and CI
-    estimate_CI_hpv_vs_co = increase_potential_cancer_number_hpv_vs_co.get_formatted_mean_and_interval(
-        interval_type='c', alpha=data.ALPHA, deci=2
-    )
-    print("Change in mean number of potential cancer cases detected (HPV vs. Co) and {:.{prec}%} confidence interval:"
-          .format(1 - data.ALPHA, prec=0), estimate_CI_hpv_vs_co)
-
-    # Calculate the difference in the number of potential cancer cases detected between Pap test and HPV test
-    increase_potential_cancer_number_pap_vs_hpv = stat.DifferenceStatIndp(
-        name='Change in mean number of potential cancer cases detected (Pap vs. HPV)',
-        x=sim_outcomes_pap.nPotentialCancer,
-        y_ref=sim_outcomes_HPV.nPotentialCancer
-    )
-
-    # Estimate and CI
-    estimate_CI_pap_vs_hpv = increase_potential_cancer_number_pap_vs_hpv.get_formatted_mean_and_interval(
-        interval_type='c', alpha=data.ALPHA, deci=2
-    )
-    print("Change in mean number of potential cancer cases detected (Pap vs. HPV) and {:.{prec}%} confidence interval:"
-          .format(1 - data.ALPHA, prec=0), estimate_CI_pap_vs_hpv)
 
 
 def report_CEA_CBA(sim_outcomes_pap, sim_outcomes_co, sim_outcomes_HPV):
@@ -162,4 +94,3 @@ def report_CEA_CBA(sim_outcomes_pap, sim_outcomes_co, sim_outcomes_HPV):
         figure_size=(6, 5),
         file_name='figs/nmb.png'
     )
-

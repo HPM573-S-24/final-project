@@ -1,4 +1,4 @@
 Strategy,Cost,Effect,Incremental Cost,Incremental Effect,ICER (with confidence interval)
-Pap test,"267 (265, 269)","21.10 (21.00, 21.20)",-,-,-
-HPV test,"901 (892, 910)","20.05 (19.95, 20.15)",-,-,Dominated
-Co test,"1,696 (1,682, 1,709)","19.34 (19.25, 19.44)",-,-,Dominated
+Pap test,"313 (311, 315)","21.16 (21.06, 21.26)",-,-,-
+HPV test,"465 (460, 470)","21.18 (21.07, 21.28)","152 (142, 161)","0.02 (-0.24, 0.27)","9,628.03 (nan, nan)"
+Co test,"814 (806, 822)","21.16 (21.06, 21.26)",-,-,Dominated

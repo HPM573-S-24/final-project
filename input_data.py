@@ -23,19 +23,14 @@ class HealthStates(Enum):
 # Natural death rate
 NATURAL_DEATH_RATE = 0.00613
 
-# Update sensitivity and specificity parameters for each screening test
+# Update sensitivity parameters for each screening test
 PAP_SENSITIVITY = 0.554
-PAP_SPECIFICITY = 0.968
-
 HPV_SENSITIVITY = 0.946
-HPV_SPECIFICITY = 0.941
-
 CO_TEST_SENSITIVITY = 0.994
-CO_TEST_SPECIFICITY = 0.95
 
-PAP_TEST_POSITIVE = 0.038/3
-HPV_TEST_POSITIVE = 0.268/5
-CO_TEST_POSITIVE = 0.4/5
+PAP_TEST_POSITIVE = 0.109/3
+HPV_TEST_POSITIVE = 0.028/5
+CO_TEST_POSITIVE = 0.027/5
 
 # Annual state costs
 ANNUAL_STATE_COST = [
@@ -49,11 +44,11 @@ ANNUAL_STATE_COST = [
 
 ANNUAL_STATE_UTILITY = [
     1,
-    0.95,
-    0.7,
-    0.6,
-    0.5,
-    0.3,
+    0.9997,
+    0.9724,
+    0.9704,
+    0.9704,
+    0.8178,
     0]
 
 # Cost of screening and colposcopy
